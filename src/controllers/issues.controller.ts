@@ -93,19 +93,19 @@ export async function createIssue(req: Request, res: Response, next: NextFunctio
     };
 
     // Send to Discord - FIX: Don't wrap payload in another object
-    const discordResponse = await axios.post(
-      DISCORD_WEBHOOK_URL,
-      discordPayload,  // Send payload directly, not wrapped
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    // const discordResponse = await axios.post(
+    //   DISCORD_WEBHOOK_URL,
+    //   discordPayload,  // Send payload directly, not wrapped
+    //   {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   }
+    // );
 
-    if (discordResponse.status !== 204 && discordResponse.status !== 200) {
-      throw new Error("Failed to send to Discord");
-    }
+    // if (discordResponse.status !== 204 && discordResponse.status !== 200) {
+    //   throw new Error("Failed to send to Discord");
+    // }
 
     // Save to database
     const issue = await prisma.issue.create({
