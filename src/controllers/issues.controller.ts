@@ -96,7 +96,7 @@ const categoryEmoji = {
     });
 
     if (!discordResponse.ok) {
-      throw new Error("Failed to send to Discord");
+    console.error("Discord webhook failed with status:", discordResponse.status);
     }
 
     const issue = await prisma.issue.create({
@@ -115,8 +115,8 @@ const categoryEmoji = {
     res.status(201).json({issue, message: "Issue reported successfully"});
 
     }catch(err){
-        next(err);
+        //next(err);
         console.error("Error submitting issue:", err);
-        res.status(500).json({ message: "Failed to submit issue" });
+        //res.status(500).json({ message: "Failed to submit issue" });
     }
 }
