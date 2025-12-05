@@ -10,7 +10,7 @@ export async function createIssue(req: Request, res: Response, next: NextFunctio
         const user = (req as AuthRequest).user;
         if(!user) return res.status(401).json({message: "Unauthorized"})
 
-        const {title, description, priority, category, generatedIssueId, timestamp, userEmail} = (req as any).validated;
+        const {title, description, priority, category, generatedIssueId, timestamp, userEmail} = req.body;
 
         // Your Discord webhook URL
         const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
