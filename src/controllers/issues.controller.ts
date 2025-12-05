@@ -3,6 +3,9 @@ import {prisma} from "../prisma.js";
 import { AuthRequest } from "../middleware/auth.js";
 
 export async function createIssue(req: Request, res: Response, next: NextFunction){
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
     try{
         const user = (req as AuthRequest).user;
         if(!user) return res.status(401).json({message: "Unauthorized"})

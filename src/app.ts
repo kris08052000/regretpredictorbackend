@@ -23,6 +23,7 @@ app.use(cors({
     origin: process.env.CORS_ORIGIN || "*",
     credentials: true
 }))
+app.options("*", cors())
 
 const globalLimiter = rateLimit({
     windowMs: 1 * 60 * 1000,
