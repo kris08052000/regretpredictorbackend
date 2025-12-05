@@ -1,0 +1,134 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+model User {
+  id                       Int                   @id @default(autoincrement())
+  email                    String                @unique
+  password                 String
+  createdAt                DateTime              @default(now())
+
+  predictions              RegretPrediction[]
+  purchases                Purchase[]
+  wishlist                 WishlistItem[]
+  notifications            Notification[]
+  priceTracks              PriceTrack[]
+  issues                   Issue[]
+}
+
+
+model RegretPrediction{
+  id                       Int                    @id @default(autoincrement())
+  userId                   Int
+  itemName                 String
+  price                    Int
+  regretScore              Int
+  reasons                  String?
+  createdAt                DateTime               @default(now())
+
+  user                     User                   @relation(fields: [userId], references: [id])
+  alternatives             Alternative[]
+}
+
+
+model Alternative{
+  id                       Int                     @id @default(autoincrement())
+  predictionId             Int
+  name                     String
+  price                    Int
+  link                     String?
+  description              String?
+
+  predictions              RegretPrediction        @relation(fields: [predictionId], references: [id])
+}
+
+model Purchase{
+  id                       Int                     @id @default(autoincrement())
+  userId                   Int
+  itemName                 String
+  price                    Int
+  date                     DateTime
+  categoryId               Int?
+
+  user                     User                    @relation(fields:[userId], references:[id])
+  category                 Category?               @relation(fields:[categoryId], references:[id]) 
+}
+
+model Category{
+  id                       Int                     @id @default(autoincrement())
+  name                     String                  @unique
+  purchases                Purchase[]
+}
+
+model WishlistItem{
+  id                       Int                     @id @default(autoincrement())
+  userId                   Int
+  itemName                 String
+  price                    Int
+  link                     String?
+  addedAt                  DateTime                 @default(now())
+
+  user                     User                     @relation(fields:[userId], references:[id])
+}
+
+model Notification{
+  id                       Int                      @id @default(autoincrement())
+  userId                   Int
+  title                    String
+  message                  String
+  read                     Boolean                  @default(false)
+  createdAt                DateTime                 @default(now())
+
+  user                     User                     @relation(fields:[userId], references:[id])
+}
+
+model PriceTrack{
+  id                       Int                      @id @default(autoincrement())
+  userId                   Int
+  itemName                 String
+  initialPrice             Int
+  currentPrice             Int
+  link                     String?
+  updatedAt                DateTime                 @default(now())
+
+  user                     User                     @relation(fields:[userId], references:[id])
+}
+
+model Issue{
+  id                       Int                      @id @default(autoincrement())
+  userId                   Int
+  generatedIssueId         String
+  title                    String
+  description              String
+  priority                 PRIORITY                 @default(MEDIUM)
+  category                 CATEGORY                 @default(BUG)
+  timestamp                String                 
+  userEmail                String
+
+  user                     User                     @relation(fields:[userId], references:[id])
+}
+
+enum PRIORITY {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum CATEGORY {
+  BUG
+  FEATURE
+  IMPROVEMENT
+  OTHER
+}

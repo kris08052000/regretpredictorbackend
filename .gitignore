@@ -10,6 +10,9 @@ yarn-error.log*
 dist/
 build/
 out/
+tsconfig.tsbuildinfo
+package-lock.json
+.git
 
 # TypeScript cache
 .tsbuildinfo
@@ -39,3 +42,5 @@ coverage/
 *.zip
 *.rar
 *.7z
+
+/generated/prisma
