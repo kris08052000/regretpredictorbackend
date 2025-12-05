@@ -129,11 +129,12 @@ export async function createIssue(req: Request, res: Response, next: NextFunctio
     });
 
   } catch (err: any) {
-    console.error("Error submitting issue:", err);
+    console.error("Error submitting issue:", err.message);
     
-    // Better error logging for Discord
+    // This part checks if the error is from Axios and logs the Discord response
     if (err.response) {
-      console.error("Discord API Error:", err.response.data);
+      console.error("Discord API response data:", err.response.data);
+      console.error("Discord API response status:", err.response.status);
     }
     
     // Don't call both next() and res.json()
